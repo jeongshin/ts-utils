@@ -11,6 +11,6 @@
     "baseUrl": ".",
     "outDir": "./lib"
   },
-  "include": ["packages/**/*"],
+  "include": ["packages/**/*", "packages/index.ts"],
   "exclude": ["node_modules", "**/*.test.ts"]
 }
