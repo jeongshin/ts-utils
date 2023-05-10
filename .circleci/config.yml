@@ -6,16 +6,14 @@ orbs:
 
 jobs:
   test:
-    docker:
-      - image: 'cimg/base:stable'
+    executor: node/default
     steps:
       - checkout
-      - node/install:
-          node-version: '16.10'
-      - node/install-packages
+      - node/install-packages:
+          pkg-manager: yarn
       - run:
           command: yarn test
-
+          name: Run unit tests
 
 workflows:
   test:
