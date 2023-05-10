@@ -10,14 +10,12 @@ jobs:
       - image: 'cimg/base:stable'
     steps:
       - checkout
-      - when:
-          condition:
-            equal: [main]
       - node/install:
           node-version: '16.10'
       - node/install-packages
       - run:
           command: yarn test
+
 
 workflows:
   test:
