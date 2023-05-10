@@ -39,3 +39,14 @@ export function assertType<
   }
   throw new Error(`unknown data type ${type}`);
 }
+
+/**
+ * check object is empty or not
+ *
+ * @param obj - non empty object
+ * @returns boolean - true if it's not empty
+ */
+export function isNonEmptyObject(obj: Record<any, any>): boolean {
+  if (typeof obj !== 'object' || obj === null) return false;
+  return Object.keys(obj).length !== 0;
+}
