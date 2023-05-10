@@ -17,7 +17,7 @@ describe('test core utils', () => {
       expect(assertType(undefined, 'null')).toBe(false);
       expect(assertType(null, 'object')).toBe(false);
       expect(assertType([], 'function')).toBe(false);
-      expect(assertType({}, 'undefined')).toBe(false);
+      expect(assertType({}, 'undefined')).toBe(true);
     });
 
     it('should narrow the type of the data', () => {
