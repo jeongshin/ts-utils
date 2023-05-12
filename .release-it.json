@@ -1,7 +1,11 @@
 {
   "git": {
+    "requireBranch": "main",
     "commitMessage": "chore: release ${version}",
     "tagName": "v${version}"
+  },
+  "hook": {
+    "before:init": ["git pull", "yarn test"]
   },
   "npm": {
     "publish": true,
