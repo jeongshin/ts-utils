@@ -50,3 +50,29 @@ export function isNonEmptyObject(obj: Record<any, any>): boolean {
   if (typeof obj !== 'object' || obj === null) return false;
   return Object.keys(obj).length !== 0;
 }
+
+/**
+ * test values of object by all given keys
+ *
+ * - `null`, `undefined`, `{}` values are regarded as value **do not exists**
+ *
+ * - all values expect above like `0`, `false`, `''` are regarded as **value exists**
+ */
+export function assertObjectValues<T extends Record<string, any>, K extends keyof T>(
+  obj: T,
+  keys: K[],
+): obj is NonNullable<T> {
+  if (!isNonEmptyObject(obj)) {
+    return false;
+  }
+
+  return Object.keys(obj)
+    .filter((key) => keys.includes(key as K))
+    .every((key) => {
+      const value = obj[key];
+      if (typeof value === 'object') {
+        return isNonEmptyObject(value);
+      }
+      return value !== null && value !== undefined;
+    });
+}

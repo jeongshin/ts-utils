@@ -1,4 +1,4 @@
-import { assertType, isNonEmptyObject } from '../';
+import { assertObjectValues, assertType, isNonEmptyObject } from '../';
 
 describe('test core utils', () => {
   describe('assertType', () => {
@@ -55,6 +55,40 @@ describe('test core utils', () => {
       //@ts-ignore: for testing invalid parameter
       expect(isNonEmptyObject(true)).toBe(false);
       expect(isNonEmptyObject([])).toBe(false);
+    });
+  });
+
+  describe('assertObjectValues', () => {
+    it('should return false if the object is invalid', () => {
+      //@ts-ignore: for testing invalid parameter
+      expect(assertObjectValues(null, ['key1', 'key2'])).toBe(false);
+      //@ts-ignore: for testing invalid parameter
+      expect(assertObjectValues({}, ['key1', 'key2'])).toBe(false);
+    });
+
+    it('should return true if all specified keys have values that are not null, undefined, or empty object', () => {
+      const obj = {
+        key1: 0,
+        key2: false,
+        key3: '',
+        key4: { nestedKey: 'nestedValue' },
+        key5: [1, 2, 3],
+      };
+      expect(assertObjectValues(obj, ['key1', 'key2'])).toBe(true);
+      expect(assertObjectValues(obj, ['key2', 'key3', 'key4', 'key5'])).toBe(true);
+    });
+
+    it('should return false if at least one specified key has a value that is null, undefined, or an empty object', () => {
+      const obj = {
+        key1: 0,
+        key2: false,
+        key3: '',
+        key4: null,
+        key5: undefined,
+        key6: {},
+        key7: { nestedKey: null },
+      };
+      expect(assertObjectValues(obj, ['key2', 'key3', 'key4', 'key5', 'key6', 'key7'])).toBe(false);
     });
   });
 });
