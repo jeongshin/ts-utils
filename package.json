@@ -11,7 +11,7 @@
     "test": "jest",
     "build": "rm -rf lib && tsc",
     "typescript": "tsc --noemit",
-    "release": "yarn build && yarn release-it patch"
+    "release": "yarn build && npx release-it patch"
   },
   "repository": {
     "type": "git",
