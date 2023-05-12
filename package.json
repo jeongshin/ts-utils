@@ -2,11 +2,16 @@
   "name": "@jeongshin/ts-utils",
   "version": "0.0.1",
   "description": "Typescript utils for me",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "test": "jest",
-    "build": "tsc"
+    "build": "rm -rf lib && tsc",
+    "typescript": "tsc --noemit",
+    "release": "yarn build && release-it patch"
   },
   "repository": {
     "type": "git",
@@ -26,6 +31,9 @@
     "jest": "^29.5.0",
     "prettier": "^2.8.8",
     "ts-jest": "^29.1.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "@commitlint/config-conventional": "^17.3.0",
+    "@release-it/conventional-changelog": "^5.1.1",
+    "release-it": "^15.6.0"
   }
 }
