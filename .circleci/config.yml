@@ -1,21 +1,67 @@
-# This config is equivalent to both the '.circleci/extended/orb-free.yml' and the base '.circleci/config.yml'
 version: 2.1
-
-orbs:
-  node: circleci/node@5.0.2
-
 jobs:
-  test:
-    executor: node/default
+  build:
+    docker:
+      - image: circleci/node:10.15
+
+    working_directory: ~/repo
+
     steps:
       - checkout
-      - node/install-packages:
-          pkg-manager: yarn
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      # run tests!
+      - run: npm test
+
+      # store test results
+      - store_test_results:
+          path: test_results
+
+      # store code coverage
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
+
+  publish:
+    docker:
+      - image: circleci/node:latest
+
+    working_directory: ~/repo
+
+    steps:
+      - attach_workspace:
+          at: ~/repo
       - run:
-          command: yarn test
-          name: Run unit tests
+          name: Authenticate with NPM
+          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
+      - run:
+          name: Publish package
+          command: npm publish --access public
 
 workflows:
-  test:
+  version: 2
+  build-and-publish:
     jobs:
-      - test
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - publish:
+          requires:
+            - build
+          filters:
+            branches:
+              only: main
+            tags:
+              only: /^v.*/
