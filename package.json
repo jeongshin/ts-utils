@@ -11,7 +11,11 @@
     "test": "jest",
     "build": "rm -rf lib && tsc",
     "typescript": "tsc --noemit",
-    "release": "yarn build && npx release-it patch"
+    "release": "yarn build && yarn release-it patch"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "repository": {
     "type": "git",
