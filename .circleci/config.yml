@@ -1,10 +1,16 @@
 version: 2.1
+
+orbs:
+  node: circleci/node@5.0.2
+
 jobs:
   build:
     docker:
       - image: circleci/node:10.15
 
     working_directory: ~/repo
+
+    executor: node/default
 
     steps:
       - checkout
@@ -14,7 +20,8 @@ jobs:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
 
-      - run: npm install
+      - node/install-packages:
+          pkg-manager: yarn
 
       - save_cache:
           paths:
@@ -22,7 +29,9 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run: npm test
+      - run:
+          command: yarn test
+          name: Run unit tests
 
       # store test results
       - store_test_results:
