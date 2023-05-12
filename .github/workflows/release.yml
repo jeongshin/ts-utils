@@ -1,7 +1,12 @@
 name: Publish to NPM
-on: workflow_dispatch
+on:
+  pull_request:
+    branches:
+      - main
+    types: [closed]
 jobs:
   release:
+    if: ${{ github.event.pull_request.merged }}
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout source code
